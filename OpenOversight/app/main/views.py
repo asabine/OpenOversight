@@ -18,7 +18,7 @@ from ..utils import (grab_officers, roster_lookup,
                      ac_can_edit_officer, add_department_query, add_unit_query,
                      create_incident, get_or_create, replace_list,
                      set_dynamic_default, create_note,
-                     create_description, filter_by_form, set_dynamic_default,
+                     create_description, filter_by_form,
                      get_uploaded_image)
 
 from .forms import (FindOfficerForm, FindOfficerIDForm, AddUnitForm,
@@ -682,6 +682,7 @@ def download_incidents_csv(department_id):
 def all_data():
     departments = Department.query.all()
     return render_template('all_depts.html', departments=departments)
+
 
 @main.route('/submit_officer_images/officer/<int:officer_id>', methods=['GET', 'POST'])
 @login_required

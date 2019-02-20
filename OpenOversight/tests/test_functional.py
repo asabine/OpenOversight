@@ -127,6 +127,10 @@ def test_lastname_capitalization(mockdata, browser):
         elem.send_keys(test_input)
         browser.find_element_by_id("submit").click()
 
+        # get past the "Submit images" page
+        images_button = browser.find_element_by_class_name("btn btn-primary")
+        images_button.click()
+
         # check result
         wait_for_element(browser, By.TAG_NAME, "tbody")
         rendered_field = browser.find_element_by_tag_name("h1").text

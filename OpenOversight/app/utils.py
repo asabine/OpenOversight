@@ -420,7 +420,7 @@ def create_description(self, form):
 
 def get_uploaded_image(image, crop_data=None, department_id=None):
     """ Takes an Image object and a cropping tuple (left, upper, right, lower), and returns a new Image object"""
-    
+
     tmpdir = tempfile.mkdtemp()
     # if there is cropdata, we're receiving an image object
     if crop_data:
@@ -478,9 +478,9 @@ def get_uploaded_image(image, crop_data=None, department_id=None):
         # If we're cropping an image, get data from the original image,
         # else, use data given to us.
         new_image = Image(filepath=url, hash_img=hash_img, is_tagged=True,
-                            date_image_inserted=datetime.datetime.now(),
-                            department_id=image.department_id,
-                            date_image_taken=image.date_image_taken)
+                          date_image_inserted=datetime.datetime.now(),
+                          department_id=image.department_id,
+                          date_image_taken=image.date_image_taken)
         db.session.add(new_image)
         db.session.commit()
         return new_image

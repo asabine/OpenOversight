@@ -1,7 +1,6 @@
 # Routing and view tests
 import pytest
 import random
-from datetime import datetime
 from io import BytesIO
 from mock import patch, MagicMock
 from flask import url_for, current_app
@@ -14,11 +13,9 @@ from .route_helpers import login_user, login_admin, login_ac, process_form_data
 from OpenOversight.app.main.forms import (AssignmentForm, DepartmentForm,
                                           AddOfficerForm, AddUnitForm,
                                           EditOfficerForm, LinkForm,
-                                          EditDepartmentForm, IncidentForm,
-                                          LocationForm, LicensePlateForm,
-                                          BrowseForm)
+                                          EditDepartmentForm)
 
-from OpenOversight.app.models import Department, Unit, Officer, Incident, Assignment, Image
+from OpenOversight.app.models import Department, Unit, Officer, Assignment, Image
 
 
 @pytest.mark.parametrize("route", [
@@ -732,7 +729,7 @@ def test_admin_adds_officer_without_middle_initial(mockdata, client, session):
                               department=department.id,
                               birth_year=1990)
         data = process_form_data(form.data)
-        
+
         rv = client.post(
             url_for('main.add_officer'),
             data=data,
@@ -867,7 +864,7 @@ def test_admin_can_add_new_officer_with_suffix(mockdata, client, session):
                               links=links)
 
         data = process_form_data(form.data)
-        
+
         rv = client.post(
             url_for('main.add_officer'),
             data=data,
@@ -894,6 +891,7 @@ def test_ac_cannot_directly_upload_photos_of_of_non_dept_officers(mockdata, clie
         )
         assert rv.status_code == 403
 
+
 # TODO: NVESTIGATE WHETHER OR NOT THIS FIX IS BOGUS
 def test_ac_can_upload_photos_of_dept_officers(mockdata, client, session):
     with current_app.test_request_context():
@@ -914,6 +912,7 @@ def test_ac_can_upload_photos_of_dept_officers(mockdata, client, session):
             assert b'Success' in rv.data
             # check that Face was added to database
             assert officer.face.count() == officer_face_count + 1
+
 
 # TODO: INVESTIGATE WHETHER OR NOT THIS FIX IS BOGUS
 def test_admin_can_upload_photos_of_dept_officers(mockdata, client, session):
@@ -987,7 +986,6 @@ def test_user_cannot_upload_officer_photo(mockdata, client, session):
         )
         assert rv.status_code == 403
         assert b'not authorized' in rv.data
-
 
 
 def test_edit_officers_with_blank_uids(mockdata, client, session):
