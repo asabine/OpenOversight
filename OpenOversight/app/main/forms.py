@@ -10,7 +10,7 @@ from wtforms.validators import (DataRequired, AnyOf, NumberRange, Regexp,
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 from ..utils import unit_choices, dept_choices
-from .choices import SUFFIX_CHOICES, GENDER_CHOICES, RACE_CHOICES, RANK_CHOICES, STATE_CHOICES, LINK_CHOICES, AGE_CHOICES
+from .choices import SUFFIX_CHOICES, GENDER_CHOICES, RACE_CHOICES, RANK_CHOICES, STATE_CHOICES, LINK_CHOICES, AGE_CHOICES, YEAR_CHOICES
 from ..formfields import TimeField
 from ..widgets import BootstrapListWidget, FormFieldWidget
 from ..models import Officer
@@ -148,7 +148,8 @@ class TextForm(EditTextForm):
     officer_id = HiddenField(validators=[Required(message='Not a valid officer ID')])
     creator_id = HiddenField(validators=[Required(message='Not a valid user ID')])
 
-
+# TODO: add last_employment_date and last_employment_details to addOfficerForm
+# TODO: test for above
 class AddOfficerForm(Form):
     first_name = StringField('First name', default='', validators=[
         Regexp('\w*'), Length(max=50), Optional()])
@@ -171,6 +172,9 @@ class AddOfficerForm(Form):
                             query_factory=unit_choices, get_label='descrip',
                             allow_blank=True, blank_text=u'Unknown unit')
     employment_date = DateField('Employment Date', validators=[Optional()])
+    last_employment_date = DateField('Last Employment Date', validators=[Optional()])
+    last_employment_details = StringField('Last Employment Details', default='', validators=[
+        Regexp('\w*'), Length(max=50), Optional()])
     birth_year = IntegerField('Birth Year', validators=[Optional()])
     department = QuerySelectField('Department', validators=[Optional()],
                                   query_factory=dept_choices, get_label='name')
@@ -195,7 +199,8 @@ class AddOfficerForm(Form):
 
     submit = SubmitField(label='Add')
 
-
+# TODO: add last_employment_date and last_employment_details to editOfficerForm
+# TODO: test for above
 class EditOfficerForm(Form):
     first_name = StringField('First name',
                              validators=[Regexp('\w*'), Length(max=50),
@@ -372,4 +377,9 @@ class BrowseForm(Form):
                           validators=[AnyOf(allowed_values(AGE_CHOICES))])
     max_age = SelectField('maximum age', default=100, choices=AGE_CHOICES,
                           validators=[AnyOf(allowed_values(AGE_CHOICES))])
+    submit = SubmitField(label='Submit')
+
+class YearSelectorForm(Form):
+    year = SelectField('year', default='', choices=YEAR_CHOICES,
+                      validators=[AnyOf(allowed_values(YEAR_CHOICES))])
     submit = SubmitField(label='Submit')

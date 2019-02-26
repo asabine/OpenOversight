@@ -10,6 +10,7 @@ from faker import Faker
 import csv
 import uuid
 import sys
+import calendar, random
 
 from OpenOversight.app import create_app, models
 from OpenOversight.app.utils import merge_dicts
@@ -73,21 +74,17 @@ def pick_department():
 def pick_uid():
     return str(uuid.uuid4())
 
-
-def pick_last_employment_date():
-    first_random_date = datetime(2018, 2, 23, 0, 0).strftime('%m/%d/%Y')
-    second_random_date = datetime(2019, 1, 30, 0, 0).strftime('%m/%d/%Y')
-    third_random_date = datetime(2016, 8, 15, 0, 0).strftime('%m/%d/%Y')
-    random.choice(['n/a', first_random_date, second_random_date, third_random_date])
-
+def generate_random_date(year, month):
+    dates = calendar.Calendar().itermonthdates(year, month)
+    random.choice([date for date in dates])
 
 def pick_last_employment_details():
     random.choice(['', 'quit, no other info available', 'released by department', 'unknown'])
 
-
 def generate_officer():
     year_born = pick_birth_date()
     f_name, m_initial, l_name = pick_name()
+    last_employment_options = [generate_random_date(2018, 1), None]
     return models.Officer(
         last_name=l_name, first_name=f_name,
         middle_initial=m_initial,
@@ -96,10 +93,9 @@ def generate_officer():
         employment_date=datetime(year_born + 20, 4, 4, 1, 1, 1),
         department_id=pick_department().id,
         unique_internal_identifier=pick_uid(),
-        last_employment_date=pick_last_employment_date(),
-        last_employment_details=pick_last_employment_details()
+        last_employment_date=random.choice(last_employment_options),
+        last_employment_details=pick_last_employment_details(),
     )
-
 
 def build_assignment(officer, unit):
     return models.Assignment(star_no=pick_star(), rank=pick_rank(),
