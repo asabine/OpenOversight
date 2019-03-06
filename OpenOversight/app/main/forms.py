@@ -218,6 +218,9 @@ class EditOfficerForm(Form):
     gender = SelectField('Gender', choices=GENDER_CHOICES, coerce=lambda x: x or None,
                          validators=[AnyOf(allowed_values(GENDER_CHOICES))])
     employment_date = DateField('Employment Date', validators=[Optional()])
+    last_employment_date = StringField('Last Employment Date', validators=[Optional()])
+    last_employment_details = StringField('Last Employment Details', default='', validators=[
+        Regexp('\w*'), Length(max=50), Optional()])
     birth_year = IntegerField('Birth Year', validators=[Optional()])
     unique_internal_identifier = StringField('Unique Internal Identifier',
                                              default='',

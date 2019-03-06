@@ -99,6 +99,8 @@ def add_officer_profile(form, current_user):
                       gender=form.gender.data,
                       birth_year=form.birth_year.data,
                       employment_date=form.employment_date.data,
+                      last_employment_date=form.last_employment_date.data,
+                      last_employment_details=form.last_employment_details.data,
                       department_id=form.department.data.id)
     db.session.add(officer)
     db.session.commit()
