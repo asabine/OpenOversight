@@ -98,9 +98,11 @@
 
   {% with paginate=officers,
           next_url=url_for('main.list_officer', department_id=department.id, page=officers.next_num,
-        from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age),
+          from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age, 
+          year=year),
           prev_url=url_for('main.list_officer', department_id=department.id, page=officers.prev_num,
-          from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age),
+          from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age,
+          year=year),
           location='bottom' %}
     {% include "partials/paginate_nav.html" %}
   {% endwith %}

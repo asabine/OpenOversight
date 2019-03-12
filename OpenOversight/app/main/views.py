@@ -306,7 +306,7 @@ def edit_department(department_id):
 
 
 @main.route('/department/<int:department_id>')
-def list_officer(department_id, page=1, from_search=False, race='Not Sure', gender='Not Sure', rank='Not Sure', min_age='16', max_age='100', year=2019):
+def list_officer(department_id, page=1, from_search=False, race='Not Sure', gender='Not Sure', rank='Not Sure', min_age='16', max_age='100', year=None):
     form = BrowseForm()
     form_data = form.data
     form_data['race'] = race
