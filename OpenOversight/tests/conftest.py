@@ -1,7 +1,6 @@
 from datetime import datetime
 from flask import current_app
 import pytest
-import random
 from selenium import webdriver
 import time
 import threading
@@ -10,7 +9,8 @@ from faker import Faker
 import csv
 import uuid
 import sys
-import calendar, random
+import calendar
+import random
 
 from OpenOversight.app import create_app, models
 from OpenOversight.app.utils import merge_dicts
@@ -74,12 +74,15 @@ def pick_department():
 def pick_uid():
     return str(uuid.uuid4())
 
+
 def generate_random_date(year, month):
     dates = calendar.Calendar().itermonthdates(year, month)
     random.choice([date for date in dates])
 
+
 def pick_last_employment_details():
     random.choice(['', 'quit, no other info available', 'released by department', 'unknown'])
+
 
 def generate_officer():
     year_born = pick_birth_date()
@@ -96,6 +99,7 @@ def generate_officer():
         last_employment_date=random.choice(last_employment_options),
         last_employment_details=pick_last_employment_details(),
     )
+
 
 def build_assignment(officer, unit):
     return models.Assignment(star_no=pick_star(), rank=pick_rank(),

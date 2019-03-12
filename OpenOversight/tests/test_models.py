@@ -18,7 +18,7 @@ def test_officer_repr(mockdata):
 
 def test_officer_last_employment_date_default(mockdata):
     officer = Officer.query.first()
-    assert officer.last_employment_date == "n/a"
+    assert officer.last_employment_date == None
 
 
 def test_assignment_repr(mockdata):

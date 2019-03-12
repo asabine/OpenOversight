@@ -148,8 +148,7 @@ class TextForm(EditTextForm):
     officer_id = HiddenField(validators=[Required(message='Not a valid officer ID')])
     creator_id = HiddenField(validators=[Required(message='Not a valid user ID')])
 
-# TODO: add last_employment_date and last_employment_details to addOfficerForm
-# TODO: test for above
+
 class AddOfficerForm(Form):
     first_name = StringField('First name', default='', validators=[
         Regexp('\w*'), Length(max=50), Optional()])
@@ -199,8 +198,7 @@ class AddOfficerForm(Form):
 
     submit = SubmitField(label='Add')
 
-# TODO: add last_employment_date and last_employment_details to editOfficerForm
-# TODO: test for above
+
 class EditOfficerForm(Form):
     first_name = StringField('First name',
                              validators=[Regexp('\w*'), Length(max=50),
@@ -218,8 +216,8 @@ class EditOfficerForm(Form):
     gender = SelectField('Gender', choices=GENDER_CHOICES, coerce=lambda x: x or None,
                          validators=[AnyOf(allowed_values(GENDER_CHOICES))])
     employment_date = DateField('Employment Date', validators=[Optional()])
-    last_employment_date = StringField('Last Employment Date', validators=[Optional()])
-    last_employment_details = StringField('Last Employment Details', default='', validators=[
+    last_employment_date = DateField('Last Employment Date', validators=[Optional()])
+    last_employment_details = DateField('Last Employment Details', default='', validators=[
         Regexp('\w*'), Length(max=50), Optional()])
     birth_year = IntegerField('Birth Year', validators=[Optional()])
     unique_internal_identifier = StringField('Unique Internal Identifier',
@@ -381,6 +379,5 @@ class BrowseForm(Form):
     max_age = SelectField('maximum age', default=100, choices=AGE_CHOICES,
                           validators=[AnyOf(allowed_values(AGE_CHOICES))])
     year = SelectField('year', default='', choices=YEAR_CHOICES,
-                      validators=[AnyOf(allowed_values(YEAR_CHOICES))])                          
+                       validators=[AnyOf(allowed_values(YEAR_CHOICES))])
     submit = SubmitField(label='Submit')
-    

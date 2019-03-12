@@ -242,13 +242,13 @@ def filter_by_form(form, officer_query, is_browse_filter=False):
         officer_query = officer_query.filter(db.or_(Officer.gender == form['gender'],
                                                     Officer.gender == 'Not Sure',
                                                     Officer.gender == None))  # noqa
-    
+
     if form['year']:
         year = int(form['year'])
         min_employment_date = datetime.date(year, 1, 1)
         if year in (2019, 2018, 2017, 2016):
             officer_query = officer_query.filter(db.or_(Officer.last_employment_date >= min_employment_date,
-                                                        Officer.last_employment_date == None))                                                    
+                                                        Officer.last_employment_date == None))
 
     current_year = datetime.datetime.now().year
     min_birth_year = current_year - int(form['min_age'])

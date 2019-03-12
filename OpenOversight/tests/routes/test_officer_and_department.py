@@ -3,7 +3,7 @@ import pytest
 import random
 from datetime import datetime
 from flask import url_for, current_app
-from ..conftest import AC_DEPT, generate_random_date
+from ..conftest import AC_DEPT
 from OpenOversight.app.utils import dept_choices
 from OpenOversight.app.main.choices import RACE_CHOICES, GENDER_CHOICES
 from .route_helpers import login_admin, login_ac, process_form_data
@@ -589,7 +589,8 @@ def test_admin_can_edit_existing_officer(mockdata, client, session):
                               rank='COMMANDER',
                               department=department.id,
                               birth_year=1990,
-                              links=links)
+                              links=links,
+                              last_employment_date=None)
         data = process_form_data(form.data)
 
         rv = client.post(
@@ -677,7 +678,8 @@ def test_ac_can_edit_officer_in_their_dept(mockdata, client, session):
                               star_no=666,
                               rank='COMMANDER',
                               department=department.id,
-                              birth_year=1990)
+                              birth_year=1990,
+                              last_employment_date=None)
 
         data = process_form_data(form.data)
 
@@ -968,35 +970,6 @@ def test_incidents_csv(mockdata, client, session):
         assert len(csv) == 1
         assert form.description.data in csv[0]
 
-    
-#TODO: implement test for browseform
-# def test_year_selector_returns_correct_year(client, mockdata, session):
-
-# TODO: got it to pass. get it to fail
-def test_year_selector_filters_out_incorrect_years(client, mockdata, session):
-    # pdb.set_trace()
-    with current_app.test_request_context():
-        department_id = Department.query.first().id
-        selected_year = 2019
-
-        form = BrowseForm(race='Not Sure',
-                            gender='Not Sure',
-                            rank='Not Sure',
-                            min_age=16,
-                            max_age=100,
-                            year=selected_year)
-
-        data = process_form_data(form.data)
-
-        rv = client.post(
-            url_for('main.list_officer', department_id=department_id),
-            data=data,
-            follow_redirects=True
-        )    
-
-        filter_list = rv.data.decode("utf-8").split("<dt>Last Employment Date</dt>")[1:]
-        incorrect_year = "<dd>2018"
-        assert not any(incorrect_year in token for token in filter_list) 
 
 def test_browse_filtering_filters_bad(client, mockdata, session):
     with current_app.test_request_context():
@@ -1123,7 +1096,7 @@ def test_edit_officers_with_blank_uids(mockdata, client, session):
         assert officer1.unique_internal_identifier is None
         assert officer2.unique_internal_identifier is None
 
-        form = EditOfficerForm(last_name='Changed', unique_internal_identifier='')
+        form = EditOfficerForm(last_name='Changed', unique_internal_identifier='', last_employment_date=datetime(2018, 12, 15).date())
         data = process_form_data(form.data)
 
         # Edit first officer
