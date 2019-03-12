@@ -31,14 +31,18 @@
         <div class="browse-form-input" data-value="{{ max_age }}">
           {{ wtf.form_field(form.max_age) }}
         </div>
+        <div class="browse-form-input" data-value="{{ year }}">
+          {{ wtf.form_field(form.year) }}
+        </div>        
         <br>
         {{ wtf.form_field(form.submit, id="submit", button_map={'submit':'primary'}) }}
     </div>
   {% with paginate=officers,
           next_url=url_for('main.list_officer', department_id=department.id, page=officers.next_num,
-        from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age),
+        from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age,
+        year=year),
           prev_url=url_for('main.list_officer', department_id=department.id, page=officers.prev_num,
-          from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age),
+          from_search=from_search, race=race, gender=gender, rank=rank, min_age=min_age, max_age=max_age, year=year),
           location='top' %}
     {% include "partials/paginate_nav.html" %}
   {% endwith %}
@@ -67,6 +71,10 @@
                     <dd>{{ assignment.rank|default('Unknown') }}</dd>
                     <dt>Race</dt>
                     <dd>{{ officer.race|default('Unknown')|lower|title }}</dd>
+                    {% if officer.last_employment_date %} 
+                      <dt>Last Employment Date</dt>
+                      <dd>{{ officer.last_employment_date|default('n/a') }}</dd>
+                    {% endif %}
                   </dl>
                 </div>
                 <div class="col-md-6 col-xs-6">
@@ -75,6 +83,10 @@
                     <dd>{{ officer.gender|default('Unknown') }}</dd>
                     <dt>Number of Photos</dt>
                     <dd>{{ officer.face.count() }}</dd>
+                    {% if officer.last_employment_date %} 
+                      <dt>Details of end of employment</dt>
+                      <dd>{{ officer.last_employment_details }}</dd>
+                    {% endif %}
                   </dl>
                 </div>
               </div>

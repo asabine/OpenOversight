@@ -3,7 +3,7 @@ import pytest
 import random
 from datetime import datetime
 from flask import url_for, current_app
-from ..conftest import AC_DEPT
+from ..conftest import AC_DEPT, generate_random_date
 from OpenOversight.app.utils import dept_choices
 from OpenOversight.app.main.choices import RACE_CHOICES, GENDER_CHOICES
 from .route_helpers import login_admin, login_ac, process_form_data
@@ -14,7 +14,7 @@ from OpenOversight.app.main.forms import (AssignmentForm, DepartmentForm,
                                           EditOfficerForm, LinkForm,
                                           EditDepartmentForm, IncidentForm,
                                           LocationForm, LicensePlateForm,
-                                          BrowseForm, YearSelectorForm)
+                                          BrowseForm)
 
 from OpenOversight.app.models import Department, Unit, Officer, Incident, Assignment
 
@@ -969,33 +969,34 @@ def test_incidents_csv(mockdata, client, session):
         assert form.description.data in csv[0]
 
     
-
+#TODO: implement test for browseform
 # def test_year_selector_returns_correct_year(client, mockdata, session):
 
+# TODO: got it to pass. get it to fail
 def test_year_selector_filters_out_incorrect_years(client, mockdata, session):
+    # pdb.set_trace()
     with current_app.test_request_context():
         department_id = Department.query.first().id
         selected_year = 2019
 
-    form = YearSelectorForm(year=selected_year)
+        form = BrowseForm(race='Not Sure',
+                            gender='Not Sure',
+                            rank='Not Sure',
+                            min_age=16,
+                            max_age=100,
+                            year=selected_year)
 
-    data = process_form_data(form.data)
+        data = process_form_data(form.data)
 
-    rv = client.post(
-        url_for('main.list_officer', department_id=department_id),
-        data=data,
-        follow_redirects=True
-    )    
+        rv = client.post(
+            url_for('main.list_officer', department_id=department_id),
+            data=data,
+            follow_redirects=True
+        )    
 
-    print("see rv below!!!!")
-    print(rv)
-
-    rv.data.decode("utf-8").split("<dt>Last Employment Date</dt>")[1:]
-    # assert that there are no officers with a last employment date of 2018, 2017, 2016
-    # how test last employment date?
-
-    #Test that officers with a last employment date in 2018 aren't returned in the search
-    
+        filter_list = rv.data.decode("utf-8").split("<dt>Last Employment Date</dt>")[1:]
+        incorrect_year = "<dd>2018"
+        assert not any(incorrect_year in token for token in filter_list) 
 
 def test_browse_filtering_filters_bad(client, mockdata, session):
     with current_app.test_request_context():

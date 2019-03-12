@@ -380,9 +380,7 @@ class BrowseForm(Form):
                           validators=[AnyOf(allowed_values(AGE_CHOICES))])
     max_age = SelectField('maximum age', default=100, choices=AGE_CHOICES,
                           validators=[AnyOf(allowed_values(AGE_CHOICES))])
-    submit = SubmitField(label='Submit')
-
-class YearSelectorForm(Form):
     year = SelectField('year', default='', choices=YEAR_CHOICES,
-                      validators=[AnyOf(allowed_values(YEAR_CHOICES))])
+                      validators=[AnyOf(allowed_values(YEAR_CHOICES))])                          
     submit = SubmitField(label='Submit')
+    

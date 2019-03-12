@@ -7,7 +7,7 @@ from OpenOversight.app.utils import get_officer
 import pytest
 import pandas as pd
 import uuid
-
+import datetime
 
 # Utils tests
 def test_department_filter(mockdata):
@@ -88,6 +88,26 @@ def test_filters_do_not_exclude_officers_without_assignments(mockdata):
     )
     assert officer in results
 
+#TODO: MAKE TESTS DRYER BY CREATING A VARIABLE (IN FIXTURES?) for first department
+def test_year_filter_selects_officer_who_quit_that_year(mockdata):
+    department = OpenOversight.app.models.Department.query.first()
+    officer_quit = OpenOversight.app.models.Officer(first_name='Bob', last_name='Smith', department=department, last_employment_date=datetime.date(2018, 4, 15))
+    results = OpenOversight.app.utils.grab_officers(
+        {'race': 'Not Sure', 'gender': 'Not Sure', 'rank': 'Not Sure',
+         'min_age': 16, 'max_age': 85, 'name': '', 'badge': '',
+         'dept': department, 'year': 2018}          
+    )
+    assert officer_quit in results
+
+def test_year_filter_does_not_exclude_officer_without_last_employment_date(mockdata):
+    department = OpenOversight.app.models.Department.query.first()
+    officer = OpenOversight.app.models.Officer(first_name='Bob', last_name='Smith', department=department)
+    results = OpenOversight.app.utils.grab_officers(
+        {'race': 'Not Sure', 'gender': 'Not Sure', 'rank': 'Not Sure',
+         'min_age': 16, 'max_age': 85, 'name': '', 'badge': '',
+         'dept': department, 'year': 2018}          
+    )
+    assert officer in results
 
 def test_filter_by_badge_no(mockdata):
     department = OpenOversight.app.models.Department.query.first()

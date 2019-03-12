@@ -28,7 +28,7 @@ from .forms import (FindOfficerForm, FindOfficerIDForm, AddUnitForm,
                     EditOfficerForm, IncidentForm, TextForm, EditTextForm,
                     AddImageForm, EditDepartmentForm, BrowseForm)
 from .model_view import ModelView
-from .choices import GENDER_CHOICES, RACE_CHOICES, RANK_CHOICES, AGE_CHOICES
+from .choices import GENDER_CHOICES, RACE_CHOICES, RANK_CHOICES, AGE_CHOICES, YEAR_CHOICES
 from ..models import (db, Image, User, Face, Officer, Assignment, Department,
                       Unit, Incident, Location, LicensePlate, Link, Note,
                       Description)
@@ -306,7 +306,7 @@ def edit_department(department_id):
 
 
 @main.route('/department/<int:department_id>')
-def list_officer(department_id, page=1, from_search=False, race='Not Sure', gender='Not Sure', rank='Not Sure', min_age='16', max_age='100'):
+def list_officer(department_id, page=1, from_search=False, race='Not Sure', gender='Not Sure', rank='Not Sure', min_age='16', max_age='100', year=2019):
     form = BrowseForm()
     form_data = form.data
     form_data['race'] = race
@@ -314,6 +314,7 @@ def list_officer(department_id, page=1, from_search=False, race='Not Sure', gend
     form_data['rank'] = rank
     form_data['min_age'] = min_age
     form_data['max_age'] = max_age
+    form_data['year'] = year
 
     OFFICERS_PER_PAGE = int(current_app.config['OFFICERS_PER_PAGE'])
     department = Department.query.filter_by(id=department_id).first()
@@ -331,6 +332,8 @@ def list_officer(department_id, page=1, from_search=False, race='Not Sure', gend
         form_data['min_age'] = request.args.get('min_age')
     if request.args.get('max_age') and request.args.get('max_age') in [ac[0] for ac in AGE_CHOICES]:
         form_data['max_age'] = request.args.get('max_age')
+    if request.args.get('year') and request.args.get('year') in [yc[0] for yc in YEAR_CHOICES]:
+        form_data['year'] = request.args.get('year')
     if request.args.get('page'):
         page = int(request.args.get('page'))
 
@@ -352,7 +355,8 @@ def list_officer(department_id, page=1, from_search=False, race='Not Sure', gend
         gender=form_data['gender'],
         rank=form_data['rank'],
         min_age=form_data['min_age'],
-        max_age=form_data['max_age'])
+        max_age=form_data['max_age'],
+        year=form_data['year'])
 
 
 @main.route('/officer/new', methods=['GET', 'POST'])
