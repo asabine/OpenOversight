@@ -228,6 +228,10 @@ def filter_by_form(form, officer_query, is_browse_filter=False):
                 cast(Assignment.star_no, db.String)
                 .like('%%{}%%'.format(form['badge']))
             )
+        if form['unique_internal_identifier']:
+            officer_query = officer_query.filter(
+                Officer.unique_internal_identifier.ilike('%%{}%%'.format(form['unique_internal_identifier']))
+            )
 
     if form['race'] in ('BLACK', 'WHITE', 'ASIAN', 'HISPANIC',
                         'PACIFIC ISLANDER', 'Other'):
@@ -422,7 +426,6 @@ def get_uploaded_cropped_image(original_image, crop_data):
     safe_local_path0 = os.path.join(tmpdir, original_filename)
     # get the original image and save it locally
     urlretrieve(original_image.filepath, safe_local_path0)
-    # import pdb; pdb.set_trace()
     pimage = Pimage.open(safe_local_path0)
     SIZE = 300, 300
     cropped_image = pimage.crop(crop_data)

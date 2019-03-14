@@ -37,6 +37,7 @@ class FindOfficerForm(Form):
     )
     badge = StringField('badge', default='', validators=[Regexp('\w*'),
                                                          Length(max=10)])
+    unique_internal_identifier = StringField('unique_internal_identifier', default='', validators=[Regexp('\w*'), Length(max=55)])
     dept = QuerySelectField('dept', validators=[DataRequired()],
                             query_factory=dept_choices, get_label='name')
     rank = SelectField('rank', default='Not Sure', choices=RANK_CHOICES,
