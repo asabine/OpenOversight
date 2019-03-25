@@ -127,7 +127,8 @@ def test_last_name_capitalization(mockdata, browser):
         browser.find_element_by_id("submit").click()
 
         # get past the "Submit images" page
-        images_button = browser.find_element_by_css_selector(".btn.btn-primary")
+        wait_for_element(browser, By.ID, "submit-officer-images")
+        images_button = browser.find_element_by_css_selector("#submit-officer-images")        
         images_button.click()
 
         # check result
@@ -165,7 +166,8 @@ def test_last_name_capitalization_short_name(mockdata, browser):
         browser.find_element_by_id("submit").click()
 
         # get past the "Submit images" page
-        images_button = browser.find_element_by_css_selector(".btn.btn-primary")
+        wait_for_element(browser, By.ID, "submit-officer-images")
+        images_button = browser.find_element_by_css_selector("#submit-officer-images")
         images_button.click()
 
         # check result
