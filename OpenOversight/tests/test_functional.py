@@ -132,8 +132,9 @@ def test_last_name_capitalization(mockdata, browser):
         images_button.click()
 
         # check result
-        wait_for_element(browser, By.TAG_NAME, "body")
+        wait_for_element(browser, By.TAG_NAME, "h1")
         rendered_field = browser.find_element_by_tag_name("h1").text
+        print(rendered_field)
         rendered_name = rendered_field.split(":")[1].strip()
         assert rendered_name == test_output
 
@@ -171,7 +172,8 @@ def test_last_name_capitalization_short_name(mockdata, browser):
         images_button.click()
 
         # check result
-        wait_for_element(browser, By.TAG_NAME, "body")
+        wait_for_element(browser, By.TAG_NAME, "h1")
         rendered_field = browser.find_element_by_tag_name("h1").text
+        print(rendered_field)
         rendered_name = rendered_field.split(":")[1].strip()
         assert rendered_name == test_output
